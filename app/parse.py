@@ -26,7 +26,10 @@ def parse_quotes_from_page(html: str) -> list[Quote]:
     for quote_element in soup.select(".quote"):
         text = quote_element.select_one(".text").get_text(strip=True)
         author = quote_element.select_one(".author").get_text(strip=True)
-        tags = [tag.get_text(strip=True) for tag in quote_element.select(".tag")]
+        tags = [
+            tag.get_text(strip=True)
+            for tag in quote_element.select(".tag")
+        ]
         quotes.append(Quote(text=text, author=author, tags=tags))
     return quotes
 
@@ -34,7 +37,7 @@ def parse_quotes_from_page(html: str) -> list[Quote]:
 def get_next_page_url(soup: BeautifulSoup) -> str | None:
     next_button = soup.select_one(".next > a")
     if next_button:
-        return BASE_URL + next_button['href']
+        return BASE_URL + next_button["href"]
     return None
 
 
@@ -52,7 +55,7 @@ def parse_all_quotes() -> list[Quote]:
 
 
 def write_quotes_to_csv(quotes: list[Quote], output_csv_path: str) -> None:
-    with open(output_csv_path, mode='w', newline='', encoding='utf-8') as file:
+    with open(output_csv_path, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=["text", "author", "tags"])
         writer.writeheader()
         for quote in quotes:
